@@ -1,17 +1,31 @@
 language: none
 
+env:
+  - GOPATH=/root/go
+
 matrix:
   include:
     - env: NAME=hello
     - env: NAME=world
 
 build:
+  # See: http://docs.shippable.com/ci/custom-docker-image/#minimum-requirements
   # pre_ci_boot:
-  #   image_name: docker
-  #   image_tag: stable
+  #   image_name: some_image
+  #   image_tag: latest
   #   pull: true
+  pre_ci:
+    - sudo snap install go
   ci:
+    # Docker artifacts are cached across all builds
     - docker build . --build-arg NAME=${NAME}
+    # Try build Go project
+    - cd ${GOPATH}
+    - go get -v github.com/gruntwork-io/terragrunt
+    - cd src/github.com/gruntwork-io/terragrunt
+    - go build -v
+
+  cache: true
 
 # jobs:
 #   - name: Build Docker image
