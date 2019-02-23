@@ -11,7 +11,7 @@ build:
   #   image_tag: stable
   #   pull: true
   ci:
-    - docker build .
+    - docker build . --build-arg NAME=${NAME}
 
 # jobs:
 #   - name: Build Docker image
