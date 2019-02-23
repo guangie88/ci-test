@@ -26,9 +26,8 @@ jobs:
       go:
         - 1.11
       script:
-        - cd ${GOPATH}
         - go get -d -u -v github.com/gruntwork-io/terragrunt
-        - cd src/github.com/gruntwork-io/terragrunt
+        - cd ${GOPATH}/src/github.com/gruntwork-io/terragrunt
         - go build -v
 
 branches:
