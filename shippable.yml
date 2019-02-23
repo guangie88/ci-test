@@ -1,5 +1,3 @@
-language: none
-
 env:
   global:
     - SLEEP_DUR=5

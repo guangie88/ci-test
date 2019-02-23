@@ -10,12 +10,15 @@ stages:
 
 jobs:
   include:
-    - stage: docker-build
+    # Template by using YAML alias
+    - &docker-build
+      stage: docker-build
       script:
         - docker build . --build-arg NAME=${NAME} --build-arg SLEEP_DUR=${SLEEP_DUR}
+    - <<: *docker-build
       env:
         - NAME=foo
-    - # same
+    - <<: *docker-build
       env:
         - NAME=bar
     - stage: go-build
