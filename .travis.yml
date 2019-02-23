@@ -8,13 +8,14 @@ stages:
   - docker-build
   - go-build
 
+# Template by using YAML alias
+docker-build: &docker-build
+  stage: docker-build
+  script:
+    - docker build . --build-arg NAME=${NAME} --build-arg SLEEP_DUR=${SLEEP_DUR}
+
 jobs:
   include:
-    # Template by using YAML alias
-    - &docker-build
-      stage: docker-build
-      script:
-        - docker build . --build-arg NAME=${NAME} --build-arg SLEEP_DUR=${SLEEP_DUR}
     - <<: *docker-build
       env:
         - NAME=foo
