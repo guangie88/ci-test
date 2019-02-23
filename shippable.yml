@@ -6,10 +6,10 @@ matrix:
     - env: NAME=world
 
 build:
-  pre_ci_boot:
-    image_name: docker
-    image_tag: stable
-    pull: true
+  # pre_ci_boot:
+  #   image_name: docker
+  #   image_tag: stable
+  #   pull: true
   ci:
     - docker build .
 
