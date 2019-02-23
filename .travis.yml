@@ -1,0 +1,35 @@
+language: bash
+
+env:
+  global:
+    - SLEEP_DUR=5
+
+stages:
+  - docker-build
+  - go-build
+
+# Template by using YAML alias
+docker-build: &docker-build
+  stage: docker-build
+  script:
+    - docker build . --build-arg NAME=${NAME} --build-arg SLEEP_DUR=${SLEEP_DUR}
+
+jobs:
+  include:
+    - <<: *docker-build
+      env:
+        - NAME=foo
+    - <<: *docker-build
+      env:
+        - NAME=bar
+    - stage: go-build
+      go:
+        - 1.11
+      script:
+        - go get -d -u -v github.com/gruntwork-io/terragrunt
+        - cd ${GOPATH}/src/github.com/gruntwork-io/terragrunt
+        - go build -v
+
+branches:
+  only:
+  - master

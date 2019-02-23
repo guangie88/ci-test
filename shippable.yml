@@ -1,0 +1,43 @@
+language: go
+
+env:
+  global:
+    - SLEEP_DUR=5
+
+matrix:
+  include:
+    - go: 1.11
+      env: NAME=foo MODE=docker
+    - go: 1.11
+      env: NAME=bar MODE=docker
+    - go: 1.11
+      env: MODE=go
+
+build:
+  # See: http://docs.shippable.com/ci/custom-docker-image/#minimum-requirements
+  # pre_ci_boot:
+  #   image_name: some_image
+  #   image_tag: latest
+  #   pull: true
+  ci:
+    # Docker artifacts are cached across all builds
+    - |-
+      if [ "${MODE}" = "docker" ]; then
+        docker build . --build-arg NAME=${NAME} --build-arg SLEEP_DUR=${SLEEP_DUR}
+      fi
+    # Try build Go project
+    - |-
+      if [ "${MODE}" = "go" ]; then
+        go get -d -u -v github.com/gruntwork-io/terragrunt
+        cd ${GOPATH}/src/github.com/gruntwork-io/terragrunt
+        go build -v
+      fi
+  cache: true
+
+jobs:
+  - name: build-runCI
+    type: runCI
+
+branches:
+  only:
+    - master
