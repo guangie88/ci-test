@@ -1,0 +1,29 @@
+language: bash
+
+env:
+  global:
+    - SLEEP_DUR=5
+
+stages:
+  - docker-build
+  - go-build
+
+jobs:
+  include:
+    - stage: docker-build
+      script:
+        - docker build . --build-arg NAME=${NAME} --build-arg SLEEP_DUR=${SLEEP_DUR}
+      env:
+        - NAME=foo
+        - NAME=bar
+    - stage: go-build
+      go: "1.11"
+      script:
+        - cd ${GOPATH}
+        - go get -v github.com/gruntwork-io/terragrunt
+        - cd src/github.com/gruntwork-io/terragrunt
+        - go build -v
+
+branches:
+  only:
+  - master

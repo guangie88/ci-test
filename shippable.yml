@@ -2,14 +2,13 @@ language: none
 
 env:
   global:
-    - GO_VERSION=1.11.5
-    - GOPATH=~/go
-    - PATH=${PATH}:/usr/local/go/bin
+    - SLEEP_DUR=5
 
 matrix:
   include:
-    - env: NAME=hello
-    - env: NAME=world
+    - env: NAME=foo
+    - env: NAME=bar
+    - go: 1.11
 
 build:
   # See: http://docs.shippable.com/ci/custom-docker-image/#minimum-requirements
@@ -17,25 +16,19 @@ build:
   #   image_name: some_image
   #   image_tag: latest
   #   pull: true
-  pre_ci:
-    - curl -sLO https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz
-    - tar -C /usr/local -xf go${GO_VERSION}.linux-amd64.tar.gz
-    - rm go${GO_VERSION}.linux-amd64.tar.gz
-    - mkdir -p ${GOPATH}
   ci:
     # Docker artifacts are cached across all builds
-    - docker build . --build-arg NAME=${NAME}
+    - docker build . --build-arg NAME=${NAME} --build-arg SLEEP_DUR=${SLEEP_DUR}
     # Try build Go project
     - cd ${GOPATH}
     - go get -v github.com/gruntwork-io/terragrunt
     - cd src/github.com/gruntwork-io/terragrunt
     - go build -v
-
   cache: true
 
-# jobs:
-#   - name: Build Docker image
-#     type: runCI
+jobs:
+  - name: build-runCI
+    type: runCI
 
 branches:
   only:
