@@ -9,7 +9,7 @@ matrix:
     - env: NAME=foo
     - env: NAME=bar
     - go:
-      - 1.11
+      - 1.10
 
 build:
   # See: http://docs.shippable.com/ci/custom-docker-image/#minimum-requirements
@@ -29,6 +29,7 @@ build:
         cd ${GOPATH}
         go get -v github.com/gruntwork-io/terragrunt
         cd src/github.com/gruntwork-io/terragrunt
+        go get -v ./...
         go build -v ./...
       fi
   cache: true
