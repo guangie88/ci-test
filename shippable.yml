@@ -8,7 +8,8 @@ matrix:
   include:
     - env: NAME=foo
     - env: NAME=bar
-    - go: 1.11
+    - go:
+      - 1.11
 
 build:
   # See: http://docs.shippable.com/ci/custom-docker-image/#minimum-requirements
@@ -18,12 +19,18 @@ build:
   #   pull: true
   ci:
     # Docker artifacts are cached across all builds
-    - docker build . --build-arg NAME=${NAME} --build-arg SLEEP_DUR=${SLEEP_DUR}
+    - |-
+      if ! which go > /dev/null; then
+        docker build . --build-arg NAME=${NAME} --build-arg SLEEP_DUR=${SLEEP_DUR}
+      fi
     # Try build Go project
-    - cd ${GOPATH}
-    - go get -v github.com/gruntwork-io/terragrunt
-    - cd src/github.com/gruntwork-io/terragrunt
-    - go build -v
+    - |-
+      if which go > /dev/null; then
+        cd ${GOPATH}
+        go get -v github.com/gruntwork-io/terragrunt
+        cd src/github.com/gruntwork-io/terragrunt
+        go build -v ./...
+      fi
   cache: true
 
 jobs:
