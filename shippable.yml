@@ -6,10 +6,11 @@ env:
 
 matrix:
   include:
-    - env: NAME=foo
-    - env: NAME=bar
-    - go:
-      - 1.11
+    - go: 1.11
+      env: NAME=foo
+    - go: 1.11
+      env: NAME=bar
+    - go: 1.11
 
 build:
   # See: http://docs.shippable.com/ci/custom-docker-image/#minimum-requirements

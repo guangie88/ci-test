@@ -23,7 +23,8 @@ jobs:
       env:
         - NAME=bar
     - stage: go-build
-      go: "1.11"
+      go:
+        - 1.11
       script:
         - cd ${GOPATH}
         - go get -d -u -v github.com/gruntwork-io/terragrunt
