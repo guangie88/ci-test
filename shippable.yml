@@ -1,0 +1,16 @@
+language: none
+
+build:
+  pre_ci_boot:
+    image_name: docker
+    image_tag: stable
+    pull: true
+
+matrix:
+  include:
+    - env: NAME=hello
+    - env: NAME=world
+
+branches:
+  only:
+    - master
