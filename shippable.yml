@@ -1,7 +1,8 @@
 language: none
 
 env:
-  - GOPATH=/root/go
+  global:
+    - GOPATH=/root/go
 
 matrix:
   include:
